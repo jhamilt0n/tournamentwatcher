@@ -24,11 +24,7 @@
             --border-focus: #d4af37;
         }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
 
         body {
             font-family: 'Source Sans 3', sans-serif;
@@ -38,34 +34,7 @@
             line-height: 1.6;
         }
 
-        .container {
-            max-width: 800px;
-            margin: 0 auto;
-            padding: 20px;
-        }
-
-        .header-image {
-            width: 100%;
-            aspect-ratio: 16/9;
-            object-fit: cover;
-            border-radius: 12px;
-            margin-bottom: 30px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5);
-            display: block;
-        }
-
-        .header-placeholder {
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, var(--bg-card) 0%, var(--bg-input) 100%);
-            border-radius: 12px;
-            margin-bottom: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: var(--text-muted);
-            font-size: 1.2rem;
-        }
+        .container { max-width: 800px; margin: 0 auto; padding: 20px; }
 
         .tournament-select-section {
             background: var(--bg-card);
@@ -159,15 +128,7 @@
         }
 
         .info-item { background: var(--bg-input); padding: 15px; border-radius: 8px; }
-
-        .info-label {
-            font-size: 0.75rem;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: var(--text-muted);
-            margin-bottom: 5px;
-        }
-
+        .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
         .info-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
         .info-value.highlight { color: var(--accent-gold); }
         .info-value.warning { color: var(--accent-orange); }
@@ -215,7 +176,6 @@
         }
 
         .edit-mode-section.editing { border-color: var(--accent-orange); background: rgba(243, 156, 18, 0.1); }
-
         .edit-mode-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px; flex-wrap: wrap; gap: 10px; }
         .edit-mode-title { font-weight: 600; color: var(--text-secondary); }
 
@@ -332,6 +292,7 @@
         .result-location { color: var(--text-muted); font-size: 0.9rem; }
         .result-stats { text-align: right; }
         .result-rating { font-weight: 700; font-size: 1.2rem; color: var(--accent-gold); }
+        .result-rating.over-max { color: var(--accent-red); }
         .result-robustness { font-size: 0.85rem; color: var(--text-muted); }
         .result-robustness.insufficient { color: var(--accent-red); }
         .result-warning { font-size: 0.8rem; color: var(--accent-orange); margin-top: 4px; }
@@ -426,10 +387,6 @@
 </head>
 <body>
     <div class="container">
-        <div id="headerContainer">
-            <div class="header-placeholder">Select a tournament to begin</div>
-        </div>
-
         <section class="tournament-select-section">
             <h2 class="section-title">Select Tournament</h2>
             <div class="form-group">
@@ -452,11 +409,12 @@
                 <div class="info-item"><div class="info-label">Play Begins</div><div class="info-value" id="infoPlayBegins"></div></div>
                 <div class="info-item"><div class="info-label">Location</div><div class="info-value" id="infoLocation"></div></div>
                 <div class="info-item"><div class="info-label">Entry Fee</div><div class="info-value highlight" id="infoEntryFee"></div></div>
-                <div class="info-item"><div class="info-label">Race To</div><div class="info-value" id="infoRace"></div></div>
+                <div class="info-item"><div class="info-label">Format</div><div class="info-value" id="infoFormat"></div></div>
+                <div class="info-item"><div class="info-label">Elimination</div><div class="info-value" id="infoElimination"></div></div>
+                <div class="info-item"><div class="info-label">Race To (W/L)</div><div class="info-value" id="infoRace"></div></div>
                 <div class="info-item"><div class="info-label">Table Size</div><div class="info-value" id="infoTableSize"></div></div>
                 <div class="info-item"><div class="info-label">Table Type</div><div class="info-value" id="infoTableType"></div></div>
                 <div class="info-item"><div class="info-label">Table Fees</div><div class="info-value" id="infoTableFees"></div></div>
-                <div class="info-item"><div class="info-label">Format</div><div class="info-value" id="infoFormat"></div></div>
             </div>
 
             <div class="info-grid">
@@ -464,7 +422,8 @@
                 <div class="info-item" id="sidepotItem" style="display:none;"><div class="info-label">Sidepot</div><div class="info-value highlight">Yes</div></div>
                 <div class="info-item" id="addedMoneyItem" style="display:none;"><div class="info-label">Added Money</div><div class="info-value highlight" id="infoAddedMoney"></div></div>
                 <div class="info-item" id="maxPlayersItem" style="display:none;"><div class="info-label">Max Entries</div><div class="info-value" id="infoMaxPlayers"></div></div>
-                <div class="info-item" id="robustnessItem" style="display:none;"><div class="info-label">Min Robustness Required</div><div class="info-value highlight" id="infoRobustness"></div></div>
+                <div class="info-item" id="robustnessItem" style="display:none;"><div class="info-label">Min Robustness</div><div class="info-value highlight" id="infoRobustness"></div></div>
+                <div class="info-item" id="maxRatingItem" style="display:none;"><div class="info-label">Max Individual Rating</div><div class="info-value warning" id="infoMaxRating"></div></div>
                 <div class="info-item" id="ratingCapItem" style="display:none;"><div class="info-label">Combined Rating Cap</div><div class="info-value warning" id="infoRatingCap"></div></div>
             </div>
 
@@ -493,6 +452,10 @@
 
             <div id="robustnessWarning" class="warning-box" style="display:none;">
                 ⚠️ This tournament requires a minimum Fargo robustness of <span id="requiredRobustness"></span>. Players not meeting this requirement cannot register.
+            </div>
+
+            <div id="maxRatingWarning" class="warning-box" style="display:none;">
+                ⚠️ This tournament has a maximum individual Fargo rating of <span id="maxRatingValue"></span>. Players above this rating cannot register.
             </div>
 
             <div id="ratingCapWarning" class="cap-warning-box" style="display:none;">
@@ -555,15 +518,17 @@
             document.getElementById('submitBtn').addEventListener('click', submitRegistration);
             document.getElementById('lookupBtn').addEventListener('click', lookupRegistration);
             document.getElementById('cancelEditBtn').addEventListener('click', cancelEditMode);
-            document.getElementById('lookupPhone').addEventListener('input', (e) => {
-                let value = e.target.value.replace(/\D/g, '');
-                if (value.length > 0) {
-                    if (value.length <= 3) value = `(${value}`;
-                    else if (value.length <= 6) value = `(${value.slice(0,3)}) ${value.slice(3)}`;
-                    else value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6,10)}`;
-                }
-                e.target.value = value;
-            });
+            document.getElementById('lookupPhone').addEventListener('input', formatPhoneInput);
+        }
+
+        function formatPhoneInput(e) {
+            let value = e.target.value.replace(/\D/g, '');
+            if (value.length > 0) {
+                if (value.length <= 3) value = `(${value}`;
+                else if (value.length <= 6) value = `(${value.slice(0,3)}) ${value.slice(3)}`;
+                else value = `(${value.slice(0,3)}) ${value.slice(3,6)}-${value.slice(6,10)}`;
+            }
+            e.target.value = value;
         }
 
         async function loadTournaments() {
@@ -598,18 +563,6 @@
 
         function displayTournamentInfo() {
             const t = selectedTournament;
-            const headerContainer = document.getElementById('headerContainer');
-            if (t.headerImage && t.headerImage.trim()) {
-                const img = document.createElement('img');
-                img.src = t.headerImage;
-                img.alt = t.name;
-                img.className = 'header-image';
-                img.onerror = function() { headerContainer.innerHTML = `<div class="header-placeholder">${t.name}</div>`; };
-                headerContainer.innerHTML = '';
-                headerContainer.appendChild(img);
-            } else {
-                headerContainer.innerHTML = `<div class="header-placeholder">${t.name}</div>`;
-            }
 
             document.getElementById('tournamentName').textContent = t.name;
             document.getElementById('infoDate').textContent = t.date;
@@ -617,11 +570,17 @@
             document.getElementById('infoPlayBegins').textContent = t.playBegins || 'TBD';
             document.getElementById('infoLocation').textContent = t.location;
             document.getElementById('infoEntryFee').textContent = t.entryFee;
-            document.getElementById('infoRace').textContent = t.race;
-            document.getElementById('infoTableSize').textContent = t.tableSize;
-            document.getElementById('infoTableType').textContent = t.tableType;
-            document.getElementById('infoTableFees').textContent = t.tableFees;
             document.getElementById('infoFormat').textContent = t.formatDescription || `${t.teamSize} Player${t.teamSize > 1 ? 's' : ''}`;
+            document.getElementById('infoElimination').textContent = t.eliminationType || 'Double Elimination';
+            
+            // Race format: Winner/Loser
+            const raceW = t.raceWinner || '?';
+            const raceL = t.raceLoser || '?';
+            document.getElementById('infoRace').textContent = `${raceW} / ${raceL}`;
+            
+            document.getElementById('infoTableSize').textContent = t.tableSize || '7ft';
+            document.getElementById('infoTableType').textContent = t.tableType || 'Diamond';
+            document.getElementById('infoTableFees').textContent = t.tableFees || 'Coin-op $1.50 per game';
 
             toggleInfoItem('auctionItem', t.playerAuction);
             toggleInfoItem('sidepotItem', t.sidepot);
@@ -634,6 +593,9 @@
 
             if (t.robustnessRequirement) { document.getElementById('robustnessItem').style.display = 'block'; document.getElementById('infoRobustness').textContent = t.robustnessRequirement; }
             else document.getElementById('robustnessItem').style.display = 'none';
+
+            if (t.maxIndividualRating) { document.getElementById('maxRatingItem').style.display = 'block'; document.getElementById('infoMaxRating').textContent = t.maxIndividualRating; }
+            else document.getElementById('maxRatingItem').style.display = 'none';
 
             if (t.ratingCap) { document.getElementById('ratingCapItem').style.display = 'block'; document.getElementById('infoRatingCap').textContent = t.ratingCap; }
             else document.getElementById('ratingCapItem').style.display = 'none';
@@ -655,7 +617,6 @@
         function hideTournamentInfo() {
             document.getElementById('tournamentInfo').classList.remove('visible');
             document.getElementById('registrationForm').classList.remove('visible');
-            document.getElementById('headerContainer').innerHTML = '<div class="header-placeholder">Select a tournament to begin</div>';
             selectedTournament = null;
         }
 
@@ -663,10 +624,17 @@
             const t = selectedTournament;
             playerSelections = new Array(t.teamSize).fill(null);
 
-            const warningEl = document.getElementById('robustnessWarning');
-            if (t.robustnessRequirement) { warningEl.style.display = 'block'; document.getElementById('requiredRobustness').textContent = t.robustnessRequirement; }
-            else warningEl.style.display = 'none';
+            // Robustness warning
+            const robustnessWarningEl = document.getElementById('robustnessWarning');
+            if (t.robustnessRequirement) { robustnessWarningEl.style.display = 'block'; document.getElementById('requiredRobustness').textContent = t.robustnessRequirement; }
+            else robustnessWarningEl.style.display = 'none';
 
+            // Max individual rating warning
+            const maxRatingWarningEl = document.getElementById('maxRatingWarning');
+            if (t.maxIndividualRating) { maxRatingWarningEl.style.display = 'block'; document.getElementById('maxRatingValue').textContent = t.maxIndividualRating; }
+            else maxRatingWarningEl.style.display = 'none';
+
+            // Combined rating cap warning and display
             const capWarningEl = document.getElementById('ratingCapWarning');
             const capDisplayEl = document.getElementById('combinedRatingDisplay');
             if (t.ratingCap && t.teamSize > 1) {
@@ -740,7 +708,7 @@
                 const data = await response.json();
                 searchBtn.disabled = false;
                 if (data.value && data.value.length > 0) { searchStatus.style.display = 'none'; displaySearchResults(index, data.value); }
-                else { searchStatus.className = 'search-status no-results'; searchStatus.textContent = `No players found matching "${query}". Try a different spelling or nickname.`; if (!selectedTournament.robustnessRequirement) notInSystemBtn.classList.remove('hidden'); }
+                else { searchStatus.className = 'search-status no-results'; searchStatus.textContent = `No players found matching "${query}". Try a different spelling or nickname.`; if (!selectedTournament.robustnessRequirement && !selectedTournament.maxIndividualRating) notInSystemBtn.classList.remove('hidden'); }
             } catch (error) { console.error('Search error:', error); searchBtn.disabled = false; searchStatus.className = 'search-status error'; searchStatus.textContent = 'Search failed. Please try again.'; }
         }
 
@@ -748,22 +716,36 @@
             const resultsList = document.getElementById(`resultsList${index}`);
             const notInSystemBtn = document.getElementById(`notInSystemBtn${index}`);
             const robustnessReq = selectedTournament.robustnessRequirement;
+            const maxIndividualRating = selectedTournament.maxIndividualRating;
             const ratingCap = selectedTournament.ratingCap;
+
             resultsList.innerHTML = players.map(player => {
-                const meetsRobustness = !robustnessReq || parseInt(player.robustness) >= parseInt(robustnessReq);
+                const playerRating = parseInt(player.rating) || 0;
+                const playerRobustness = parseInt(player.robustness) || 0;
+                
+                const meetsRobustness = !robustnessReq || playerRobustness >= parseInt(robustnessReq);
+                const meetsMaxRating = !maxIndividualRating || playerRating <= parseInt(maxIndividualRating);
                 const robustnessClass = meetsRobustness ? '' : 'insufficient';
+                const ratingClass = meetsMaxRating ? '' : 'over-max';
+                
                 let wouldExceedCap = false, capWarningText = '';
                 if (ratingCap && selectedTournament.teamSize > 1) {
-                    const potentialTotal = calculatePotentialRating(index, parseInt(player.rating) || 0);
+                    const potentialTotal = calculatePotentialRating(index, playerRating);
                     if (potentialTotal > parseInt(ratingCap)) { wouldExceedCap = true; capWarningText = `Would bring total to ${potentialTotal} (over ${ratingCap} cap)`; }
                 }
-                const canSelect = meetsRobustness && !wouldExceedCap;
+                
+                const canSelect = meetsRobustness && meetsMaxRating && !wouldExceedCap;
                 let itemClass = '';
-                if (!meetsRobustness) itemClass = 'disabled';
-                else if (wouldExceedCap) itemClass = 'would-exceed-cap';
-                return `<div class="result-item ${itemClass}" onclick="${canSelect ? `selectPlayer(${index}, ${JSON.stringify(player).replace(/"/g, '&quot;')})` : ''}" title="${!meetsRobustness ? 'Does not meet robustness requirement' : wouldExceedCap ? 'Would exceed rating cap' : 'Click to select'}"><div class="result-info"><div class="result-name">${player.firstName} ${player.lastName}</div><div class="result-location">${player.location || 'Location unknown'}</div>${wouldExceedCap ? `<div class="result-warning">⚠️ ${capWarningText}</div>` : ''}</div><div class="result-stats"><div class="result-rating">${player.rating}</div><div class="result-robustness ${robustnessClass}">Robustness: ${player.robustness}</div></div></div>`;
+                let disableReason = '';
+                if (!meetsRobustness) { itemClass = 'disabled'; disableReason = 'Does not meet robustness requirement'; }
+                else if (!meetsMaxRating) { itemClass = 'disabled'; disableReason = `Rating ${playerRating} exceeds max ${maxIndividualRating}`; }
+                else if (wouldExceedCap) { itemClass = 'would-exceed-cap'; disableReason = 'Would exceed rating cap'; }
+                
+                return `<div class="result-item ${itemClass}" onclick="${canSelect ? `selectPlayer(${index}, ${JSON.stringify(player).replace(/"/g, '&quot;')})` : ''}" title="${disableReason || 'Click to select'}"><div class="result-info"><div class="result-name">${player.firstName} ${player.lastName}</div><div class="result-location">${player.location || 'Location unknown'}</div>${wouldExceedCap ? `<div class="result-warning">⚠️ ${capWarningText}</div>` : ''}${!meetsMaxRating ? `<div class="result-warning">⚠️ Exceeds max rating of ${maxIndividualRating}</div>` : ''}</div><div class="result-stats"><div class="result-rating ${ratingClass}">${player.rating}</div><div class="result-robustness ${robustnessClass}">Robustness: ${player.robustness}</div></div></div>`;
             }).join('');
-            if (!robustnessReq) notInSystemBtn.classList.remove('hidden');
+
+            // Show "not in system" only if no robustness or max rating requirement
+            if (!robustnessReq && !maxIndividualRating) notInSystemBtn.classList.remove('hidden');
         }
 
         function calculatePotentialRating(changingIndex, newRating) {
