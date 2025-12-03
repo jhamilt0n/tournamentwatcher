@@ -183,35 +183,6 @@
         .sponsor-link:hover { transform: translateY(-2px); box-shadow: 0 4px 15px rgba(24, 119, 242, 0.4); }
         .sponsor-link svg { width: 18px; height: 18px; }
 
-        /* Quick Info Bar */
-        .quick-info {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 15px;
-            margin-bottom: 25px;
-            padding: 20px;
-            background: var(--bg-input);
-            border-radius: 10px;
-        }
-
-        .quick-info-item {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .quick-info-label {
-            font-size: 0.8rem;
-            text-transform: uppercase;
-            color: var(--text-muted);
-        }
-
-        .quick-info-value {
-            font-weight: 700;
-            color: var(--accent-green);
-            font-size: 1.1rem;
-        }
-
         .info-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
@@ -471,7 +442,6 @@
             .lookup-form { flex-direction: column; }
             .rating-display-content { flex-direction: column; gap: 15px; text-align: center; }
             .rating-cap-info { text-align: center; }
-            .quick-info { flex-direction: column; gap: 10px; }
         }
     </style>
 </head>
@@ -500,34 +470,16 @@
             <!-- Sponsors - Right after tournament name -->
             <div id="sponsorsSection" class="sponsors-section"></div>
 
-            <!-- Quick highlights -->
-            <div class="quick-info">
-                <div class="quick-info-item">
-                    <span class="quick-info-label">Entry:</span>
-                    <span class="quick-info-value" id="infoEntryFee"></span>
-                </div>
-                <div class="quick-info-item">
-                    <span class="quick-info-label">Date:</span>
-                    <span class="quick-info-value" id="infoDate"></span>
-                </div>
-                <div class="quick-info-item">
-                    <span class="quick-info-label">Format:</span>
-                    <span class="quick-info-value" id="infoElimination"></span>
-                </div>
-                <div class="quick-info-item">
-                    <span class="quick-info-label">Race:</span>
-                    <span class="quick-info-value" id="infoRace"></span>
-                </div>
-            </div>
-
+            <!-- Tournament Info Card -->
             <div class="info-grid">
+                <div class="info-item"><div class="info-label">Location</div><div class="info-value" id="infoLocation"></div></div>
+                <div class="info-item"><div class="info-label">Date</div><div class="info-value highlight" id="infoDate"></div></div>
+                <div class="info-item"><div class="info-label">Entry Fee</div><div class="info-value highlight" id="infoEntryFee"></div></div>
                 <div class="info-item"><div class="info-label">Doors Open</div><div class="info-value" id="infoDoorsOpen"></div></div>
                 <div class="info-item"><div class="info-label">Play Begins</div><div class="info-value" id="infoPlayBegins"></div></div>
-                <div class="info-item"><div class="info-label">Location</div><div class="info-value" id="infoLocation"></div></div>
                 <div class="info-item"><div class="info-label">Format</div><div class="info-value" id="infoFormat"></div></div>
-                <div class="info-item"><div class="info-label">Table Size</div><div class="info-value" id="infoTableSize"></div></div>
-                <div class="info-item"><div class="info-label">Table Type</div><div class="info-value" id="infoTableType"></div></div>
-                <div class="info-item"><div class="info-label">Table Fees</div><div class="info-value" id="infoTableFees"></div></div>
+                <div class="info-item"><div class="info-label">Race (W/L)</div><div class="info-value" id="infoRace"></div></div>
+                <div class="info-item"><div class="info-label">Tables</div><div class="info-value" id="infoTables"></div></div>
                 <div class="info-item" id="maxPlayersItem" style="display:none;"><div class="info-label">Max Entries</div><div class="info-value" id="infoMaxPlayers"></div></div>
             </div>
 
@@ -693,24 +645,32 @@
                     sponsorsSection.style.display = 'none';
                 }
 
-                // Quick info with $ prefix on entry fee
+                // Info card values
+                document.getElementById('infoLocation').textContent = t.location || 'TBD';
+                document.getElementById('infoDate').textContent = t.date || 'TBD';
+                
                 const entryFee = String(t.entryFee || '');
                 const formattedFee = entryFee.startsWith('$') ? entryFee : '$' + entryFee;
                 document.getElementById('infoEntryFee').textContent = formattedFee;
-                document.getElementById('infoDate').textContent = t.date || 'TBD';
-                document.getElementById('infoElimination').textContent = t.eliminationType || 'Double Elimination';
                 
+                document.getElementById('infoDoorsOpen').textContent = t.doorsOpen || 'TBD';
+                document.getElementById('infoPlayBegins').textContent = t.playBegins || 'TBD';
+                
+                // Format: combine team size + elimination type
+                const teamSizeText = t.teamSize === 1 ? 'Singles' : (t.teamSize === 2 ? 'Doubles' : t.teamSize + ' Person Team');
+                const eliminationType = t.eliminationType || 'Double Elimination';
+                document.getElementById('infoFormat').textContent = teamSizeText + ' - ' + eliminationType;
+                
+                // Race
                 const raceW = t.raceWinner || t.race || '?';
                 const raceL = t.raceLoser || '?';
                 document.getElementById('infoRace').textContent = raceW + '/' + raceL;
-
-                document.getElementById('infoDoorsOpen').textContent = t.doorsOpen || 'TBD';
-                document.getElementById('infoPlayBegins').textContent = t.playBegins || 'TBD';
-                document.getElementById('infoLocation').textContent = t.location || 'TBD';
-                document.getElementById('infoFormat').textContent = t.teamSize + ' Player' + (t.teamSize > 1 ? 's' : '');
-                document.getElementById('infoTableSize').textContent = t.tableSize || '7ft';
-                document.getElementById('infoTableType').textContent = t.tableType || 'Diamond';
-                document.getElementById('infoTableFees').textContent = t.tableFees || 'Coin-op $1.50 per game';
+                
+                // Tables: concatenate size, type, fees
+                const tableSize = t.tableSize || '7ft';
+                const tableType = t.tableType || 'Diamond';
+                const tableFees = t.tableFees || 'Coin-op $1.50 per game';
+                document.getElementById('infoTables').textContent = tableSize + ' ' + tableType + ' • ' + tableFees;
 
                 toggleInfoItem('auctionItem', t.playerAuction);
                 toggleInfoItem('sidepotItem', t.sidepot);
