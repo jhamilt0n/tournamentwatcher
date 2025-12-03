@@ -641,69 +641,93 @@
         }
 
         function onTournamentChange(e) {
-            const tournamentId = e.target.value;
-            cancelEditMode();
-            if (!tournamentId) { hideTournamentInfo(); return; }
-            selectedTournament = tournaments.find(t => t.id === tournamentId);
-            if (selectedTournament) { displayTournamentInfo(); buildRegistrationForm(); }
+            try {
+                const tournamentId = e.target.value;
+                cancelEditMode();
+                if (!tournamentId) { hideTournamentInfo(); return; }
+                selectedTournament = tournaments.find(t => t.id === tournamentId);
+                console.log('Selected tournament:', selectedTournament);
+                if (selectedTournament) { 
+                    displayTournamentInfo(); 
+                    buildRegistrationForm(); 
+                }
+            } catch (error) {
+                console.error('Error in onTournamentChange:', error);
+                alert('Error: ' + error.message);
+            }
         }
 
         function displayTournamentInfo() {
-            const t = selectedTournament;
+            try {
+                const t = selectedTournament;
+                console.log('Displaying tournament info:', t);
 
-            document.getElementById('tournamentName').textContent = t.name;
-            document.getElementById('tournamentTagline').textContent = t.formatDescription || `${t.teamSize}-Player ${t.eliminationType || 'Double Elimination'}`;
+                document.getElementById('tournamentName').textContent = t.name;
+                document.getElementById('tournamentTagline').textContent = t.formatDescription || `${t.teamSize}-Player ${t.eliminationType || 'Double Elimination'}`;
 
-            // Sponsors - right after name
-            const sponsorsSection = document.getElementById('sponsorsSection');
-            if (t.sponsorLinks && t.sponsorLinks.length > 0) {
-                sponsorsSection.style.display = 'block';
-                sponsorsSection.innerHTML = `
-                    <div class="sponsors-header">
-                        <h3>💰 Tournament Sponsors Adding Money! 💰</h3>
-                        <p>Click their Facebook profiles below to show some love!</p>
-                    </div>
-                    <div class="sponsors-list">
-                        ${t.sponsorLinks.map(link => {
-                            const name = extractFacebookName(link);
-                            return `<a href="${link}" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>${name}</a>`;
-                        }).join('')}
-                    </div>
-                `;
-            } else sponsorsSection.style.display = 'none';
+                // Sponsors - right after name
+                const sponsorsSection = document.getElementById('sponsorsSection');
+                if (t.sponsorLinks && t.sponsorLinks.length > 0) {
+                    sponsorsSection.style.display = 'block';
+                    let sponsorHtml = '<div class="sponsors-header"><h3>💰 Tournament Sponsors Adding Money! 💰</h3><p>Click their Facebook profiles below to show some love!</p></div><div class="sponsors-list">';
+                    t.sponsorLinks.forEach(link => {
+                        const name = extractFacebookName(link);
+                        sponsorHtml += '<a href="' + link + '" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>' + name + '</a>';
+                    });
+                    sponsorHtml += '</div>';
+                    sponsorsSection.innerHTML = sponsorHtml;
+                } else {
+                    sponsorsSection.style.display = 'none';
+                }
 
-            // Quick info with $ prefix on entry fee
-            const entryFee = t.entryFee || '';
-            const formattedFee = entryFee.startsWith('$') ? entryFee : `$${entryFee}`;
-            document.getElementById('infoEntryFee').textContent = formattedFee;
-            document.getElementById('infoDate').textContent = t.date;
-            document.getElementById('infoElimination').textContent = t.eliminationType || 'Double Elimination';
-            
-            const raceW = t.raceWinner || '?';
-            const raceL = t.raceLoser || '?';
-            document.getElementById('infoRace').textContent = `${raceW}/${raceL}`;
+                // Quick info with $ prefix on entry fee
+                const entryFee = t.entryFee || '';
+                const formattedFee = entryFee.toString().startsWith('$') ? entryFee : '$' + entryFee;
+                document.getElementById('infoEntryFee').textContent = formattedFee;
+                document.getElementById('infoDate').textContent = t.date || 'TBD';
+                document.getElementById('infoElimination').textContent = t.eliminationType || 'Double Elimination';
+                
+                const raceW = t.raceWinner || t.race || '?';
+                const raceL = t.raceLoser || '?';
+                document.getElementById('infoRace').textContent = raceW + '/' + raceL;
 
-            document.getElementById('infoDoorsOpen').textContent = t.doorsOpen || 'TBD';
-            document.getElementById('infoPlayBegins').textContent = t.playBegins || 'TBD';
-            document.getElementById('infoLocation').textContent = t.location;
-            document.getElementById('infoFormat').textContent = `${t.teamSize} Player${t.teamSize > 1 ? 's' : ''}`;
-            document.getElementById('infoTableSize').textContent = t.tableSize || '7ft';
-            document.getElementById('infoTableType').textContent = t.tableType || 'Diamond';
-            document.getElementById('infoTableFees').textContent = t.tableFees || 'Coin-op $1.50 per game';
+                document.getElementById('infoDoorsOpen').textContent = t.doorsOpen || 'TBD';
+                document.getElementById('infoPlayBegins').textContent = t.playBegins || 'TBD';
+                document.getElementById('infoLocation').textContent = t.location || 'TBD';
+                document.getElementById('infoFormat').textContent = t.teamSize + ' Player' + (t.teamSize > 1 ? 's' : '');
+                document.getElementById('infoTableSize').textContent = t.tableSize || '7ft';
+                document.getElementById('infoTableType').textContent = t.tableType || 'Diamond';
+                document.getElementById('infoTableFees').textContent = t.tableFees || 'Coin-op $1.50 per game';
 
-            toggleInfoItem('auctionItem', t.playerAuction);
-            toggleInfoItem('sidepotItem', t.sidepot);
-            
-            if (t.addedMoney) { document.getElementById('addedMoneyItem').style.display = 'block'; document.getElementById('infoAddedMoney').textContent = t.addedMoneyStructure || 'Yes'; }
-            else document.getElementById('addedMoneyItem').style.display = 'none';
+                toggleInfoItem('auctionItem', t.playerAuction);
+                toggleInfoItem('sidepotItem', t.sidepot);
+                
+                if (t.addedMoney) { 
+                    document.getElementById('addedMoneyItem').style.display = 'block'; 
+                    document.getElementById('infoAddedMoney').textContent = t.addedMoneyStructure || 'Yes'; 
+                } else {
+                    document.getElementById('addedMoneyItem').style.display = 'none';
+                }
 
-            if (t.maxPlayers) { document.getElementById('maxPlayersItem').style.display = 'block'; document.getElementById('infoMaxPlayers').textContent = t.maxPlayers; }
-            else document.getElementById('maxPlayersItem').style.display = 'none';
+                if (t.maxPlayers) { 
+                    document.getElementById('maxPlayersItem').style.display = 'block'; 
+                    document.getElementById('infoMaxPlayers').textContent = t.maxPlayers; 
+                } else {
+                    document.getElementById('maxPlayersItem').style.display = 'none';
+                }
 
-            if (t.rules) { document.getElementById('rulesSection').style.display = 'block'; document.getElementById('infoRules').textContent = t.rules; }
-            else document.getElementById('rulesSection').style.display = 'none';
+                if (t.rules) { 
+                    document.getElementById('rulesSection').style.display = 'block'; 
+                    document.getElementById('infoRules').textContent = t.rules; 
+                } else {
+                    document.getElementById('rulesSection').style.display = 'none';
+                }
 
-            document.getElementById('tournamentInfo').classList.add('visible');
+                document.getElementById('tournamentInfo').classList.add('visible');
+            } catch (error) {
+                console.error('Error in displayTournamentInfo:', error);
+                alert('Error displaying tournament: ' + error.message);
+            }
         }
 
         function toggleInfoItem(id, show) { document.getElementById(id).style.display = show ? 'block' : 'none'; }
