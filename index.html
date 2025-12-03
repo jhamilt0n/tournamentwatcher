@@ -681,8 +681,8 @@
                 }
 
                 // Quick info with $ prefix on entry fee
-                const entryFee = t.entryFee || '';
-                const formattedFee = entryFee.toString().startsWith('$') ? entryFee : '$' + entryFee;
+                const entryFee = String(t.entryFee || '');
+                const formattedFee = entryFee.startsWith('$') ? entryFee : '$' + entryFee;
                 document.getElementById('infoEntryFee').textContent = formattedFee;
                 document.getElementById('infoDate').textContent = t.date || 'TBD';
                 document.getElementById('infoElimination').textContent = t.eliminationType || 'Double Elimination';
