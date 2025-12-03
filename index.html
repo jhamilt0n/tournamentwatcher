@@ -802,7 +802,14 @@
             section.id = `playerSection${index}`;
             const title = isSingle ? 'Player Information' : `Player ${index + 1}`;
             const phoneHtml = isSingle ? `<div class="form-group" style="margin-top: 20px;"><label class="form-label" for="playerPhone${index}">Phone Number</label><div class="phone-input-wrapper"><span class="phone-prefix">+1</span><input type="tel" class="form-input phone-input" id="playerPhone${index}" placeholder="(555) 123-4567" maxlength="14"></div><div id="playerPhoneValidation${index}" class="phone-validation"></div></div>` : '';
-            section.innerHTML = `<h3 class="player-header">${title}</h3><div class="search-container"><input type="text" class="form-input search-input" id="searchInput${index}" placeholder="Enter player name to search Fargo database"><button type="button" class="btn btn-search" id="searchBtn${index}">Search</button></div><div class="search-results" id="searchResults${index}"><div class="search-status" id="searchStatus${index}"></div><div class="results-list" id="resultsList${index}"></div><button type="button" class="not-in-system-btn hidden" id="notInSystemBtn${index}">Player not in Fargo system - Enter name manually</button></div><div class="selected-player" id="selectedPlayer${index}"><div class="selected-player-info"><h4 id="selectedName${index}"></h4><p id="selectedDetails${index}"></p></div><button type="button" class="btn btn-clear" id="clearBtn${index}">Change</button></div>${phoneHtml}`;
+            
+            // Dynamic placeholder based on requirements
+            const hasRequirements = selectedTournament.robustnessRequirement || selectedTournament.maxIndividualRating || selectedTournament.ratingCap;
+            const placeholder = hasRequirements 
+                ? "Enter your name and select the matching record" 
+                : "See if we know you, if not just enter your name";
+            
+            section.innerHTML = `<h3 class="player-header">${title}</h3><div class="search-container"><input type="text" class="form-input search-input" id="searchInput${index}" placeholder="${placeholder}"><button type="button" class="btn btn-search" id="searchBtn${index}">Search</button></div><div class="search-results" id="searchResults${index}"><div class="search-status" id="searchStatus${index}"></div><div class="results-list" id="resultsList${index}"></div><button type="button" class="not-in-system-btn hidden" id="notInSystemBtn${index}">Not in the system? No problem - click here!</button></div><div class="selected-player" id="selectedPlayer${index}"><div class="selected-player-info"><h4 id="selectedName${index}"></h4><p id="selectedDetails${index}"></p></div><button type="button" class="btn btn-clear" id="clearBtn${index}">Change</button></div>${phoneHtml}`;
             setTimeout(() => {
                 document.getElementById(`searchBtn${index}`).addEventListener('click', () => searchPlayer(index));
                 document.getElementById(`searchInput${index}`).addEventListener('keypress', (e) => { if (e.key === 'Enter') searchPlayer(index); });
@@ -824,7 +831,7 @@
             if (!query) return;
             searchResults.classList.add('visible');
             searchStatus.className = 'search-status loading';
-            searchStatus.innerHTML = '<span class="spinner"></span> Searching Fargo database...';
+            searchStatus.innerHTML = '<span class="spinner"></span> Searching...';
             resultsList.innerHTML = '';
             notInSystemBtn.classList.add('hidden');
             searchBtn.disabled = true;
@@ -833,7 +840,16 @@
                 const data = await response.json();
                 searchBtn.disabled = false;
                 if (data.value && data.value.length > 0) { searchStatus.style.display = 'none'; displaySearchResults(index, data.value); }
-                else { searchStatus.className = 'search-status no-results'; searchStatus.textContent = `No players found matching "${query}". Try a different spelling or nickname.`; if (!selectedTournament.robustnessRequirement && !selectedTournament.maxIndividualRating) notInSystemBtn.classList.remove('hidden'); }
+                else { 
+                    searchStatus.className = 'search-status no-results'; 
+                    const hasRequirements = selectedTournament.robustnessRequirement || selectedTournament.maxIndividualRating;
+                    if (hasRequirements) {
+                        searchStatus.textContent = `No players found matching "${query}". Try a different spelling or nickname.`;
+                    } else {
+                        searchStatus.textContent = `We don't have "${query}" in our system yet - no problem! Click below to enter your name.`;
+                        notInSystemBtn.classList.remove('hidden');
+                    }
+                }
             } catch (error) { console.error('Search error:', error); searchBtn.disabled = false; searchStatus.className = 'search-status error'; searchStatus.textContent = 'Search failed. Please try again.'; }
         }
 
