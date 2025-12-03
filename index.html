@@ -137,7 +137,33 @@
         .rules-title { font-weight: 700; color: var(--accent-gold); margin-bottom: 10px; }
         .rules-text { color: var(--text-secondary); white-space: pre-wrap; }
 
-        .sponsors-section { display: flex; flex-wrap: wrap; gap: 10px; }
+        .sponsors-section {
+            margin-top: 25px;
+        }
+
+        .sponsors-header {
+            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dim) 100%);
+            border-radius: 10px;
+            padding: 20px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .sponsors-header h3 {
+            font-family: 'Bebas Neue', sans-serif;
+            font-size: 1.6rem;
+            letter-spacing: 2px;
+            color: var(--bg-dark);
+            margin-bottom: 8px;
+        }
+
+        .sponsors-header p {
+            color: var(--bg-dark);
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        .sponsors-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
 
         .sponsor-link {
             display: inline-flex;
@@ -605,11 +631,19 @@
 
             const sponsorsSection = document.getElementById('sponsorsSection');
             if (t.sponsorLinks && t.sponsorLinks.length > 0) {
-                sponsorsSection.style.display = 'flex';
-                sponsorsSection.innerHTML = t.sponsorLinks.map(link => {
-                    const name = extractFacebookName(link);
-                    return `<a href="${link}" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>${name}</a>`;
-                }).join('');
+                sponsorsSection.style.display = 'block';
+                sponsorsSection.innerHTML = `
+                    <div class="sponsors-header">
+                        <h3>💰 Tournament Sponsors Adding Money! 💰</h3>
+                        <p>Click their Facebook profiles below to show some love!</p>
+                    </div>
+                    <div class="sponsors-list">
+                        ${t.sponsorLinks.map(link => {
+                            const name = extractFacebookName(link);
+                            return `<a href="${link}" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>${name}</a>`;
+                        }).join('')}
+                    </div>
+                `;
             } else sponsorsSection.style.display = 'none';
 
             document.getElementById('tournamentInfo').classList.add('visible');
