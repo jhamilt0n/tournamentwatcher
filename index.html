@@ -3,25 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Tournament Registration</title>
+    <title>Bankshot Bar & Billiards - Tournament Registration</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
         :root {
-            --bg-dark: #0a0a0f;
-            --bg-card: #12121a;
-            --bg-input: #1a1a25;
+            --bg-dark: #0a0f0a;
+            --bg-card: #121a12;
+            --bg-input: #1a251a;
+            --accent-green: #228B22;
+            --accent-green-light: #2ea82e;
+            --accent-green-dark: #1a6b1a;
             --accent-gold: #d4af37;
-            --accent-gold-dim: #b8962e;
-            --accent-green: #2ecc71;
             --accent-red: #e74c3c;
             --accent-orange: #f39c12;
             --text-primary: #f0f0f0;
-            --text-secondary: #a0a0a8;
-            --text-muted: #606068;
-            --border-color: #2a2a35;
-            --border-focus: #d4af37;
+            --text-secondary: #a8b0a8;
+            --text-muted: #606860;
+            --border-color: #2a352a;
+            --border-focus: #228B22;
         }
 
         * { margin: 0; padding: 0; box-sizing: border-box; }
@@ -36,6 +37,18 @@
 
         .container { max-width: 800px; margin: 0 auto; padding: 20px; }
 
+        .logo-header {
+            text-align: center;
+            padding: 30px 20px;
+            margin-bottom: 20px;
+        }
+
+        .logo-header img {
+            max-width: 350px;
+            width: 100%;
+            height: auto;
+        }
+
         .tournament-select-section {
             background: var(--bg-card);
             border-radius: 12px;
@@ -48,7 +61,7 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.8rem;
             letter-spacing: 2px;
-            color: var(--accent-gold);
+            color: var(--accent-green);
             margin-bottom: 20px;
         }
 
@@ -133,25 +146,26 @@
         }
 
         .sponsors-header {
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dim) 100%);
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
             border-radius: 10px;
             padding: 20px;
             margin-bottom: 15px;
             text-align: center;
+            border: 3px solid #1a5c1a;
         }
 
         .sponsors-header h3 {
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.6rem;
             letter-spacing: 2px;
-            color: var(--bg-dark);
+            color: white;
             margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
         }
 
         .sponsors-header p {
-            color: var(--bg-dark);
+            color: rgba(255,255,255,0.9);
             font-size: 0.95rem;
-            opacity: 0.9;
         }
 
         .sponsors-list { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; }
@@ -198,7 +212,7 @@
 
         .quick-info-value {
             font-weight: 700;
-            color: var(--accent-gold);
+            color: var(--accent-green);
             font-size: 1.1rem;
         }
 
@@ -212,10 +226,10 @@
         .info-item { background: var(--bg-input); padding: 15px; border-radius: 8px; }
         .info-label { font-size: 0.75rem; text-transform: uppercase; letter-spacing: 1px; color: var(--text-muted); margin-bottom: 5px; }
         .info-value { font-size: 1.1rem; font-weight: 600; color: var(--text-primary); }
-        .info-value.highlight { color: var(--accent-gold); }
+        .info-value.highlight { color: var(--accent-green); }
 
         .rules-section { background: var(--bg-input); padding: 20px; border-radius: 8px; margin-top: 20px; }
-        .rules-title { font-weight: 700; color: var(--accent-gold); margin-bottom: 10px; }
+        .rules-title { font-weight: 700; color: var(--accent-green); margin-bottom: 10px; }
         .rules-text { color: var(--text-secondary); white-space: pre-wrap; }
 
         /* Registration Form */
@@ -271,7 +285,7 @@
         .rating-display-content { display: flex; justify-content: space-between; align-items: center; }
         .rating-info { display: flex; flex-direction: column; }
         .rating-label { font-size: 0.85rem; color: var(--text-muted); text-transform: uppercase; letter-spacing: 1px; }
-        .rating-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent-gold); }
+        .rating-value { font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--accent-green); }
         .rating-value.over-cap { color: var(--accent-red); }
         .rating-cap-info { text-align: right; }
 
@@ -291,7 +305,7 @@
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.4rem;
             letter-spacing: 2px;
-            color: var(--accent-gold);
+            color: var(--accent-green);
             margin-bottom: 20px;
         }
 
@@ -309,8 +323,8 @@
             transition: all 0.3s ease;
         }
 
-        .btn-search { background: var(--accent-gold); color: var(--bg-dark); }
-        .btn-search:hover { background: var(--accent-gold-dim); transform: translateY(-1px); }
+        .btn-search { background: var(--accent-green); color: white; }
+        .btn-search:hover { background: var(--accent-green-light); transform: translateY(-1px); }
         .btn-search:disabled { background: var(--text-muted); cursor: not-allowed; transform: none; }
 
         .btn-lookup { background: var(--accent-orange); color: var(--bg-dark); }
@@ -326,7 +340,7 @@
         .search-results.visible { display: block; }
 
         .search-status { padding: 15px; border-radius: 8px; margin-bottom: 15px; font-weight: 500; }
-        .search-status.loading { background: rgba(212, 175, 55, 0.1); color: var(--accent-gold); }
+        .search-status.loading { background: rgba(34, 139, 34, 0.1); color: var(--accent-green); }
         .search-status.error { background: rgba(231, 76, 60, 0.1); color: var(--accent-red); }
         .search-status.no-results { background: rgba(160, 160, 168, 0.1); color: var(--text-secondary); }
 
@@ -344,7 +358,7 @@
             transition: all 0.2s ease;
         }
 
-        .result-item:hover { border-color: var(--accent-gold); transform: translateX(5px); }
+        .result-item:hover { border-color: var(--accent-green); transform: translateX(5px); }
         .result-item.disabled { opacity: 0.5; cursor: not-allowed; }
         .result-item.disabled:hover { border-color: var(--accent-red); transform: none; }
         .result-item.would-exceed-cap { border-color: var(--accent-orange); opacity: 0.7; }
@@ -354,7 +368,7 @@
         .result-name { font-weight: 700; font-size: 1.1rem; margin-bottom: 3px; }
         .result-location { color: var(--text-muted); font-size: 0.9rem; }
         .result-stats { text-align: right; }
-        .result-rating { font-weight: 700; font-size: 1.2rem; color: var(--accent-gold); }
+        .result-rating { font-weight: 700; font-size: 1.2rem; color: var(--accent-green); }
         .result-rating.over-max { color: var(--accent-red); }
         .result-robustness { font-size: 0.85rem; color: var(--text-muted); }
         .result-robustness.insufficient { color: var(--accent-red); }
@@ -421,16 +435,16 @@
         .btn-submit {
             width: 100%;
             padding: 18px 30px;
-            background: linear-gradient(135deg, var(--accent-gold) 0%, var(--accent-gold-dim) 100%);
-            color: var(--bg-dark);
+            background: linear-gradient(135deg, var(--accent-green) 0%, var(--accent-green-dark) 100%);
+            color: white;
             font-family: 'Bebas Neue', sans-serif;
             font-size: 1.4rem;
             letter-spacing: 3px;
             border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(212, 175, 55, 0.3);
+            box-shadow: 0 4px 20px rgba(34, 139, 34, 0.3);
         }
 
-        .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(212, 175, 55, 0.4); }
+        .btn-submit:hover:not(:disabled) { transform: translateY(-2px); box-shadow: 0 6px 30px rgba(34, 139, 34, 0.4); }
         .btn-submit:disabled { background: var(--text-muted); box-shadow: none; cursor: not-allowed; }
         .btn-submit.update-mode { background: linear-gradient(135deg, var(--accent-orange) 0%, #e67e22 100%); box-shadow: 0 4px 20px rgba(243, 156, 18, 0.3); }
 
@@ -443,9 +457,9 @@
             display: inline-block;
             width: 20px;
             height: 20px;
-            border: 3px solid rgba(212, 175, 55, 0.3);
+            border: 3px solid rgba(34, 139, 34, 0.3);
             border-radius: 50%;
-            border-top-color: var(--accent-gold);
+            border-top-color: var(--accent-green);
             animation: spin 1s ease-in-out infinite;
         }
 
@@ -467,6 +481,10 @@
 </head>
 <body>
     <div class="container">
+        <header class="logo-header">
+            <img src="Bankshot_Logo.png" alt="Bankshot Bar & Billiards">
+        </header>
+
         <section class="tournament-select-section">
             <h2 class="section-title">Select Tournament</h2>
             <div class="form-group">
