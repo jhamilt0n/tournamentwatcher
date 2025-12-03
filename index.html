@@ -606,7 +606,10 @@
             const sponsorsSection = document.getElementById('sponsorsSection');
             if (t.sponsorLinks && t.sponsorLinks.length > 0) {
                 sponsorsSection.style.display = 'flex';
-                sponsorsSection.innerHTML = t.sponsorLinks.map((link, i) => `<a href="${link}" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>Sponsor ${t.sponsorLinks.length > 1 ? i + 1 : ''}</a>`).join('');
+                sponsorsSection.innerHTML = t.sponsorLinks.map(link => {
+                    const name = extractFacebookName(link);
+                    return `<a href="${link}" target="_blank" class="sponsor-link"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>${name}</a>`;
+                }).join('');
             } else sponsorsSection.style.display = 'none';
 
             document.getElementById('tournamentInfo').classList.add('visible');
@@ -897,6 +900,47 @@
             const digits = phone.replace(/\D/g, '').slice(-10);
             if (digits.length === 10) return `(${digits.slice(0,3)}) ${digits.slice(3,6)}-${digits.slice(6)}`;
             return phone;
+        }
+
+        function extractFacebookName(url) {
+            if (!url) return 'Sponsor';
+            try {
+                // Remove trailing slashes and query params
+                let cleanUrl = url.split('?')[0].replace(/\/+$/, '');
+                
+                // Extract the last part of the path
+                let parts = cleanUrl.split('/');
+                let name = parts[parts.length - 1];
+                
+                // Handle profile.php?id=xxx format
+                if (name === 'profile.php' || !name) {
+                    return 'Sponsor';
+                }
+                
+                // Remove common prefixes
+                name = name.replace(/^(pages\/|pg\/|groups\/)/, '');
+                
+                // Convert URL-style names to readable format
+                // "JoesPoolHall" -> "Joes Pool Hall"
+                // "joes-pool-hall" -> "Joes Pool Hall"
+                // "joes.pool.hall" -> "Joes Pool Hall"
+                
+                // Replace dots and hyphens with spaces
+                name = name.replace(/[.\-_]/g, ' ');
+                
+                // Add spaces before capital letters (camelCase)
+                name = name.replace(/([a-z])([A-Z])/g, '$1 $2');
+                
+                // Capitalize first letter of each word
+                name = name.split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1).toLowerCase())
+                    .join(' ')
+                    .trim();
+                
+                return name || 'Sponsor';
+            } catch (e) {
+                return 'Sponsor';
+            }
         }
 
         async function submitRegistration() {
