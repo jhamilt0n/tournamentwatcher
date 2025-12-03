@@ -130,13 +130,7 @@
             font-size: 2.5rem;
             letter-spacing: 3px;
             color: var(--text-primary);
-            margin-bottom: 10px;
-        }
-
-        .tournament-tagline {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-bottom: 25px;
+            margin-bottom: 20px;
         }
 
         /* Sponsors Section - Prominent */
@@ -500,7 +494,6 @@
 
         <section id="tournamentInfo" class="tournament-info">
             <h1 id="tournamentName" class="tournament-name"></h1>
-            <p id="tournamentTagline" class="tournament-tagline"></p>
 
             <!-- Sponsors - Right after tournament name -->
             <div id="sponsorsSection" class="sponsors-section"></div>
@@ -681,7 +674,6 @@
                 console.log('Displaying tournament info:', t);
 
                 document.getElementById('tournamentName').textContent = t.name;
-                document.getElementById('tournamentTagline').textContent = t.formatDescription || `${t.teamSize}-Player ${t.eliminationType || 'Double Elimination'}`;
 
                 // Sponsors - right after name
                 const sponsorsSection = document.getElementById('sponsorsSection');
