@@ -607,6 +607,7 @@
         let playerSelections = [];
         let isEditMode = false;
         let editRowIndex = null;
+        let hasAttemptedSubmit = false;
 
         document.addEventListener('DOMContentLoaded', () => {
             loadTournaments();
@@ -789,6 +790,7 @@
             // Clear validation errors
             document.getElementById('validationErrors').innerHTML = '';
             document.getElementById('validationErrors').classList.remove('visible');
+            hasAttemptedSubmit = false;
 
             document.getElementById('registrationForm').classList.add('visible');
             validateForm();
@@ -988,15 +990,19 @@
             const submitBtn = document.getElementById('submitBtn');
             const errorsDiv = document.getElementById('validationErrors');
 
-            if (errors.length > 0) {
-                submitBtn.disabled = true;
+            // Always enable submit button - we'll validate on click
+            submitBtn.disabled = false;
+
+            // Only show errors if user has attempted to submit
+            if (hasAttemptedSubmit && errors.length > 0) {
                 errorsDiv.innerHTML = errors.map(e => `<div class="validation-error">⚠️ ${e}</div>`).join('');
                 errorsDiv.classList.add('visible');
             } else {
-                submitBtn.disabled = false;
                 errorsDiv.innerHTML = '';
                 errorsDiv.classList.remove('visible');
             }
+            
+            return errors.length === 0;
         }
 
         function isPhoneValid(inputId) { 
@@ -1098,6 +1104,14 @@
         }
 
         async function submitRegistration() {
+            // Mark that user has attempted to submit
+            hasAttemptedSubmit = true;
+            
+            // Validate and show errors if any
+            if (!validateForm()) {
+                return; // Don't proceed if validation fails
+            }
+            
             const submitBtn = document.getElementById('submitBtn');
             submitBtn.disabled = true;
             submitBtn.innerHTML = '<span class="spinner"></span> ' + (isEditMode ? 'Updating...' : 'Submitting...');
@@ -1117,7 +1131,7 @@
             submitBtn.innerHTML = isEditMode ? 'Update Registration' : 'Complete Registration';
         }
 
-        function resetForm() { document.getElementById('tournamentSelect').value = ''; isEditMode = false; editRowIndex = null; hideTournamentInfo(); }
+        function resetForm() { document.getElementById('tournamentSelect').value = ''; isEditMode = false; editRowIndex = null; hasAttemptedSubmit = false; hideTournamentInfo(); }
 
         function showAlert(type, message) {
             const alertEl = document.getElementById(type === 'success' ? 'alertSuccess' : 'alertError');
